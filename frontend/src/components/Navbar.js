@@ -1,5 +1,5 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import logo from "../assets/logo-footer.jpeg";
 import "../style.css";
 
@@ -8,18 +8,24 @@ const Navbar = () => {
 
   useEffect(() => {
     const onScroll = () => setOffset(window.pageYOffset);
-    window.removeEventListener("scroll", onScroll);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
     <>
-      <nav>
+      <nav
+        className="navbar navbar-expand-lg"
+        style={{ backgroundColor: "black" }}
+      >
         <div className="container">
-          <a className="navbar-brand text-white " href="index.html">
-            <img src={logo} alt="" style={{ height: "6rem", width: "10rem" }} />
-          </a>
+          <Link className="navbar-brand" to="/">
+            <img
+              src={logo}
+              alt="logo"
+              style={{ height: "6rem", width: "10rem" }}
+            />
+          </Link>
 
           <button
             className="navbar-toggler"
@@ -33,11 +39,16 @@ const Navbar = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav align-items-lg-center ms-auto me-lg-5">
+            <ul className="navbar-nav ms-auto">
               <li className="nav-item">
-                <a className="nav-link click-scroll" href="#section_1">
+                <Link className="nav-link" to="/">
                   Home
-                </a>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/events">
+                  View Events
+                </Link>
               </li>
             </ul>
           </div>

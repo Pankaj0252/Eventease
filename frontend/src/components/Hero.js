@@ -12,7 +12,7 @@ const Hero = () => {
           <div class="row">
             <div class="col-12 mt-auto mb-5 text-center">
               <small>Event Ease</small>
-
+              <p>Your one-stop solution for managing events effortlessly.</p>
               <h1 class="text-white mb-5">2024</h1>
 
               <a class="btn custom-btn smoothscroll" href="">
