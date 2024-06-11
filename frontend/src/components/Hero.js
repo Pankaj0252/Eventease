@@ -1,7 +1,5 @@
 import React from "react";
 import Navbar from "./Navbar";
-import fablogo from "../assets/fablogo.jpeg";
-import instalogo from "../assets/insta.jpeg";
 import "../style.css";
 const Hero = () => {
   return (
@@ -17,7 +15,7 @@ const Hero = () => {
 
               <h1 class="text-white mb-5">2024</h1>
 
-              <a class="btn custom-btn smoothscroll" href="1section_2">
+              <a class="btn custom-btn smoothscroll" href="">
                 Let's begin
               </a>
             </div>
@@ -29,7 +27,6 @@ const Hero = () => {
         <div class="video-wrap">
           <video autoPlay loop muted class="custom-video" poster="">
             <source src="video/pexels-2022395.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
           </video>
         </div>
       </section>

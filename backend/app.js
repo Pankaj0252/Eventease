@@ -3,14 +3,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
-
+const cors = require("cors"); // Import cors
+const error = require("./error");
 
 // Routes import
 const userRoutes = require("./api/routes/user");
 const eventsRoute = require("./api/routes/events");
-const cors = require("./cors");
-const error = require("./error");
-
 
 // Initialize the Express app
 const app = express();
@@ -28,13 +26,13 @@ mongoose
   })
   .catch((err) => console.log("Error connecting to database:", err));
 
-// Body Parser middleware
+// Middleware setup
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors()); // Use cors middleware
 
-// Handle CORS and routes
-app.use(cors);
+// Handle routes
 app.use("/user", userRoutes);
 app.use("/events", eventsRoute);
 app.use(error);

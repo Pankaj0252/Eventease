@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import axios from "axios";
 import SuccessModal from "../utils/modal/SuccessModal";
+import { Link } from "react-router-dom";
 
 const Auth = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -142,9 +143,9 @@ const Auth = () => {
                       </button>
                       <p className="mt-3 text-center">
                         Already have an account?{" "}
-                        <a href="1" className="text-primary">
+                        <Link to="/login" className="text-primary">
                           Login here
-                        </a>
+                        </Link>
                       </p>
                     </form>
                   </div>

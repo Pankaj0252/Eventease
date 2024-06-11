@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-const jwt = require("../../middleware/jwtAssign");
+//const jwt = require("../../middleware/jwtAssign");
 const User = require("../../models/user");
+const jwt = require("jsonwebtoken");
 const { default: mongoose } = require("mongoose");
 
 router.post("/register", (req, res, next) => {
@@ -24,7 +25,7 @@ router.post("/register", (req, res, next) => {
               _id: new mongoose.Types.ObjectId(),
               name: req.body.name,
               email: req.body.email,
-              password: hash, // Use the hashed password
+              password: req.body.password,
             });
             user
               .save()
@@ -49,22 +50,32 @@ router.post("/register", (req, res, next) => {
     });
 });
 
-router.post("/signIn", (req, res, next) => {
-  User.findOne({ email: req.body.email })
-    .exec()
-    .then((user) => {
-      if (user && user.validPassword(req.body.password)) {
-        let token = jwt.generateJWT({
-          email: req.body.email,
-          phone: req.body.phone,
-        }); // Generate the token, so that user can be validate on later process
-        res.cookie("token", token);
-        res.status(201).json({ message: "logged in", token });
-      } else res.status(400).json({ message: "User or Password incorrect" });
-    })
-    .catch((err) => {
-      res.status(400).json({ message: err.message });
+router.post("/Login", async (req, res, next) => {
+  console.log("TTTTTT");
+  try {
+    // Find user by email
+    const user = await User.findOne({ email: req.body.email }).exec();
+    console.log(user);
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
+    // Compare passwords
+    const isPasswordValid = bcrypt.compare(req.body.password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: "Invalid password" });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h", // Token expiration time
     });
+
+    res.status(201).json({ message: "Logged in successfully", token });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 module.exports = router;
