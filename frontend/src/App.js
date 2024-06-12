@@ -6,6 +6,7 @@ import ViewEvents from "./components/ViewEvents";
 import AddEvent from "./components/AddEvent";
 import Login from "./components/auth/Login";
 import Auth from "./pages/auth";
+import AdminLogin from "./components/AdminLogin";
 import "./style.css";
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/add-event" element={<AddEvent />} />
         <Route path="/events" element={<ViewEvents />} />
         <Route path="/index" element={<Index />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
       </Routes>
     </>
   );

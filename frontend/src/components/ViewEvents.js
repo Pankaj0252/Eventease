@@ -31,21 +31,21 @@ const ViewEvents = () => {
       <div className="row">
         {events.map((event) => (
           <div className="col-md-6 mb-4" key={event.id}>
-            <div className="card h-100">
+            <div className="cardviewEvents h-100">
               <img
                 src={event.image}
-                className="card-img-top"
+                className="cardviewEvents-img-top"
                 alt={event.title}
               />
-              <div className="card-body">
-                <h5 className="card-title">{event.title}</h5>
-                <p className="card-text">
+              <div className="cardviewEvents-cardviewEventsbody">
+                <h5 className="cardviewEvents-title">{event.title}</h5>
+                <p className="cardviewEvents-text">
                   <strong>Date:</strong> {event.date}
                 </p>
-                <p className="card-text">
+                <p className="cardviewEvents-text">
                   <strong>Location:</strong> {event.location}
                 </p>
-                <p className="card-text">{event.description}</p>
+                <p className="cardviewEvents-text">{event.description}</p>
                 <a href="#" className="btn btn-primary">
                   Learn More
                 </a>

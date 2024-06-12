@@ -11,7 +11,7 @@ const Auth = () => {
     name: "",
     email: "",
     password: "",
-    agreedToTerms: false, // Track whether the user has agreed to terms and conditions
+    agreedToTerms: false,
   });
 
   const handleInputChange = (event) => {
@@ -144,6 +144,12 @@ const Auth = () => {
                       <p className="mt-3 text-center">
                         Already have an account?{" "}
                         <Link to="/login" className="text-primary">
+                          Login here
+                        </Link>
+                      </p>
+                      <p className="mt-3 text-center">
+                        Admin?{" "}
+                        <Link to="/admin/login" className="text-primary">
                           Login here
                         </Link>
                       </p>
