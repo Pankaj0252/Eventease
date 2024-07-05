@@ -14,7 +14,7 @@ console.log("mongoose-------", process.env.PORT);
 //   useNewUrlParser: true,
 //   useUnifiedTopology: true,
 // });
-mongoose.connect(`mongodb://127.0.0.1:27017/eventease_db`);
+mongoose.connect(`mongodb+srv://Eventease:Password@cluster0.fbisxmy.mongodb.net/eventease_db`);
 
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
