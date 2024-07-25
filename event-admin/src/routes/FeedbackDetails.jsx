@@ -1,0 +1,56 @@
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { getSingleFeedback } from '../services/api.service';
+import '../routes/auth/main.css';
+
+export default function FeedbackDetails() {
+    const params = useParams();
+    const feedbackId = params.feedbackId;
+    const [feedback, setFeedback] = useState(null);
+
+    useEffect(() => {
+        const fetchSingleFeedback = async () => {
+            try {
+                const result = await getSingleFeedback(feedbackId);
+                console.log(result);
+                setFeedback(result);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchSingleFeedback();
+    }, [feedbackId]);
+
+    return (
+        <div className="feedback-details-container">
+            <div className="feedback-details-card">
+                <h2>Feedback Info</h2>
+                <table className="feedback-details-table">
+                    <tbody>
+                        <tr>
+                            <td><strong>Name</strong></td>
+                            <td>{feedback?.name}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Email</strong></td>
+                            <td>{feedback?.email}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Message</strong></td>
+                            <td>{feedback?.message}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Feedback Type</strong></td>
+                            <td>{feedback?.feedbackType}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Created At</strong></td>
+                            <td>{feedback?.createdAt}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+}
