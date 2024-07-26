@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { getUpcomingEvents } from '../services/api.service';
 import LatestEvent from './LatestEvent';
 import UpcomingEvent from './UpcomingEvent';
+import '../routes/auth/main.css';
 
 const Home = () => {
 
@@ -33,22 +34,18 @@ const Home = () => {
                             About Us
                         </Link>
                     </button>
-
                 </div>
             </div>
             <div className="container mt-5">
                 <div className="row">
                     <div className="col-md-12">
                         <div className="mx-auto text-center">
-
                             <div className="row mb-5 text-center">
                                 <LatestEvent />
                             </div>
-
                             <div className="row mt-5 mb-5 text-center">
                                 <UpcomingEvent />
                             </div>
-
                         </div>
                     </div>
                 </div>

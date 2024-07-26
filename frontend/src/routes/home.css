@@ -1,0 +1,97 @@
+/* Home Section */
+.home-section {
+    padding: 20px;
+    background-color: #f3f4f6;
+    font-family: 'Arial, sans-serif';
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    background-image: url('path/to/your/background-image.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    padding: 60px 20px;
+    text-align: center;
+    box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.5);
+}
+
+/* Dashboard */
+.dashboard {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 8px;
+}
+
+.dashboard h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #fff;
+    text-transform: capitalize;
+}
+
+.dashboard-lead {
+    font-weight: 300;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    color: #d1d1d1;
+}
+
+.dashboard-button {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.dashboard-link {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Container and Rows */
+.container {
+    padding: 20px;
+}
+
+.row {
+    margin: 0 -15px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Event Containers */
+.latest-event-container,
+.upcoming-event-container {
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.latest-event-container {
+    margin-bottom: 2rem;
+}
+
+.upcoming-event-container {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Utility Classes */
+.mt-5 {
+    margin-top: 3rem;
+}
+
+.mb-5 {
+    margin-bottom: 3rem;
+}

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Form, Button, Row, Col, Alert } from 'react-bootstrap';
 import { createContact } from '../services/api.service';
 import { useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaPhone, FaMapMarker } from 'react-icons/fa';
+import '../routes/auth/main.css';
 
 export default function ContactUs() {
     const navigate = useNavigate();
@@ -31,101 +31,93 @@ export default function ContactUs() {
             setMessage({ type: 'success', content: 'Submit successful!' });
         } catch (error) {
             console.error(error);
-            setMessage({ type: 'error', content: 'Error Occured' });
+            setMessage({ type: 'error', content: 'Error Occurred' });
         }
     }
 
-
     return (
-        <div className="contact-us-section">
-            <div className="contact-title-section text-white text-center d-flex align-items-center justify-content-center">
+        <div className="contact-container">
+            <div className="contact-header">
                 <h1>Contact Us</h1>
+                <p>If you have any questions, please feel free to reach out to us. We are here to help you!</p>
             </div>
-            <div className="container py-5">
-                <div className="row justify-content-center text-center">
-                    <div className="col-md-12 py-5">
-                        <p>If you have any questions, please feel free to reach out to us. We are here to help you!</p>
+            <div className="contact-info">
+                <div className="contact-details">
+                    <div className="contact-item">
+                        <h3><FaEnvelope /> Email</h3>
+                        <p>abc@example.com</p>
                     </div>
-                    <div className="col-md-10 text-center mt-3 mb-5">
-                        <Row>
-                            <Col>
-                                <h3><FaEnvelope /> Email</h3>
-                                <p>abc@example.com</p>
-                            </Col>
-                            <Col>
-                                <h3><FaPhone /> Phone</h3>
-                                <p>+9876543210</p>
-                            </Col>
-                            <Col>
-                                <h3><FaMapMarker /> Address</h3>
-                                <p> Street, City, Country</p>
-                            </Col>
-                        </Row>
+                    <div className="contact-item">
+                        <h3><FaPhone /> Phone</h3>
+                        <p>+9876543210</p>
                     </div>
-                    <div className="container">
-                        <div className="row justify-content-center">
-                            <div className="col-md-6">
-                                <div className="form-wrapper bg-light mt-2 p-5">
-                                    <Form onSubmit={handleCreateContactForm}>
-                                        {message && (
-                                            <Alert variant={message.type} className="mb-3">
-                                                {message.content}
-                                            </Alert>
-                                        )}
-                                        <Form.Group className="mb-4">
-                                            <Form.Label className="d-flex text-left">Name</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                placeholder="Enter Name"
-                                                name="name"
-                                                value={formData.name}
-                                                onChange={handleInputChange}
-                                                required
-                                            />
-                                        </Form.Group>
-                                        <Form.Group className="mb-4">
-                                            <Form.Label className="d-flex text-left">Email</Form.Label>
-                                            <Form.Control
-                                                type="email"
-                                                placeholder="Enter email"
-                                                name="email"
-                                                value={formData.email}
-                                                onChange={handleInputChange}
-                                                required
-                                            />
-                                        </Form.Group>
-                                        <Form.Group className="mb-4">
-                                            <Form.Label className="d-flex text-left">Phone</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                placeholder="Enter phone number"
-                                                name="phone"
-                                                value={formData.phone}
-                                                onChange={handleInputChange}
-                                                required
-                                            />
-                                        </Form.Group>
-                                        <Form.Group className="mb-4">
-                                            <Form.Label className="d-flex text-left">Message</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                placeholder="Enter message"
-                                                name="message"
-                                                value={formData.message}
-                                                onChange={handleInputChange}
-                                                required
-                                            />
-                                        </Form.Group>
-                                        <Button variant="primary" type="submit" className="w-100">
-                                            Send Message
-                                        </Button>
-                                    </Form>
-                                </div>
-                            </div>
-                        </div>
+                    <div className="contact-item">
+                        <h3><FaMapMarker /> Address</h3>
+                        <p> Street, City, Country</p>
                     </div>
                 </div>
             </div>
+            <div className="contact-form">
+                <form onSubmit={handleCreateContactForm}>
+                    {message && (
+                        <div className={`alert ${message.type}`}>
+                            {message.content}
+                        </div>
+                    )}
+                    <div className="form-group">
+                        <label htmlFor="name" className="form-label">Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Enter Name"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            className="form-input"
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="email" className="form-label">Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            className="form-input"
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="phone" className="form-label">Phone</label>
+                        <input
+                            type="text"
+                            id="phone"
+                            placeholder="Enter phone number"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                            className="form-input"
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="message" className="form-label">Message</label>
+                        <textarea
+                            id="message"
+                            placeholder="Enter message"
+                            name="message"
+                            value={formData.message}
+                            onChange={handleInputChange}
+                            className="form-input"
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="btn-submit">Send Message</button>
+                </form>
+            </div>
         </div>
-    )
+    );
 }

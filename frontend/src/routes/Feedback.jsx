@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Form, Alert, InputGroup, DropdownButton, Dropdown } from "react-bootstrap";
-
-import { createFeedback } from '../services/api.service';
 import { useNavigate } from 'react-router-dom';
+import { createFeedback } from '../services/api.service';
+import '../routes/auth/main.css';
 
 export default function Feedback() {
     const navigate = useNavigate();
@@ -22,90 +21,91 @@ export default function Feedback() {
         });
     };
 
-    const handleRoleChange = (feedbackType) => {
-        setFormData({ ...formData, feedbackType });
+    const handleRoleChange = (event) => {
+        setFormData({ ...formData, feedbackType: event.target.value });
     };
 
     const handleCreateFeedbackForm = async (event) => {
         event.preventDefault();
         const { name, email, feedbackType, message } = formData;
         try {
-            var res = await createFeedback({ name, email, feedbackType, message });
-            console.log(res)
+            await createFeedback({ name, email, feedbackType, message });
             navigate('/thank-you');
             setMessage({ type: 'success', content: 'Submit successful!' });
         } catch (error) {
-            console.error('Error creating user:', error);
-            setMessage({ type: 'error', content: 'Error Occured' });
+            console.error('Error creating feedback:', error);
+            setMessage({ type: 'error', content: 'Error occurred' });
         }
-    }
+    };
+
     return (
-        <div className="contact-us-section">
+        <div className="feedback-section">
             <div className="container py-5">
                 <div className="row justify-content-center text-center">
                     <div className="col-md-6">
-                        <div className="form-wrapper bg-lightp-5">
-                            <Form onSubmit={handleCreateFeedbackForm}>
-                                <Form.Group className="mb-4">
-                                    {message && (
-                                        <Alert variant={message.type} className="mb-3">
-                                            {message.content}
-                                        </Alert>
-                                    )}
-                                    <Form.Label className="d-flex text-left">Name</Form.Label>
-                                    <Form.Control
+                        <div className="form-wrapper">
+                            <form onSubmit={handleCreateFeedbackForm}>
+                                {message && (
+                                    <div className={`alert ${message.type}`}>
+                                        {message.content}
+                                    </div>
+                                )}
+                                <div className="form-group">
+                                    <label htmlFor="name">Name</label>
+                                    <input
                                         type="text"
-                                        placeholder="Enter Name"
+                                        id="name"
                                         name="name"
+                                        placeholder="Enter Name"
                                         value={formData.name}
                                         onChange={handleInputChange}
                                         required
                                     />
-                                </Form.Group>
-                                <Form.Group className="mb-4">
-                                    <Form.Label className="d-flex text-left">Email</Form.Label>
-                                    <Form.Control
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="email">Email</label>
+                                    <input
                                         type="email"
-                                        placeholder="Enter email"
+                                        id="email"
                                         name="email"
+                                        placeholder="Enter email"
                                         value={formData.email}
                                         onChange={handleInputChange}
                                         required
                                     />
-                                </Form.Group>
-                                <Form.Group className="mb-4">
-                                    <Form.Label className="d-flex text-left">Message</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="Enter message"
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="message">Message</label>
+                                    <textarea
+                                        id="message"
                                         name="message"
+                                        placeholder="Enter message"
                                         value={formData.message}
                                         onChange={handleInputChange}
                                         required
-                                    />
-                                </Form.Group>
-                                <Form.Group className="mb-3">
-                                    <Form.Label className="d-flex text-left">Feedback Type</Form.Label>
-                                    <InputGroup>
-                                        <DropdownButton
-                                            variant="outline-secondary"
-                                            title={formData.feedbackType}
-                                            onSelect={handleRoleChange}
-                                        >
-                                            <Dropdown.Item eventKey="positive">Positive</Dropdown.Item>
-                                            <Dropdown.Item eventKey="negative">Negative</Dropdown.Item>
-                                            <Dropdown.Item eventKey="neutral">Neutral</Dropdown.Item>
-                                        </DropdownButton>
-                                    </InputGroup>
-                                </Form.Group>
-                                <Button variant="primary" type="submit" className="w-100">
+                                    ></textarea>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="feedbackType">Feedback Type</label>
+                                    <select
+                                        id="feedbackType"
+                                        name="feedbackType"
+                                        value={formData.feedbackType}
+                                        onChange={handleRoleChange}
+                                    >
+                                        <option value="positive">Positive</option>
+                                        <option value="negative">Negative</option>
+                                        <option value="neutral">Neutral</option>
+                                    </select>
+                                </div>
+                                <button type="submit" className="submit-button">
                                     Send Message
-                                </Button>
-                            </Form>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    )
+    );
 }

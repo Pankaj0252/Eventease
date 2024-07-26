@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getEvents } from '../services/api.service';
+import '../routes/auth/main.css';
 
 const LatestEvent = () => {
     const [events, setEvents] = useState([]);
@@ -28,35 +29,32 @@ const LatestEvent = () => {
     const latestEvents = getLatestEvents();
 
     return (
-        <div className="container mt-2">
-            <h2 className="text-center mb-5">Latest Awesome Events</h2>
-            <div className="row row-cols-1 row-cols-md-3 g-4">
+        <div className="latest-events-container">
+            <h2 className="latest-events-title">Latest Awesome Events</h2>
+            <div className="events-grid">
                 {latestEvents.map((event) => (
-                    <div className="col" key={event._id}>
-                        <Link to={`/events/${event._id}`} className="text-decoration-none">
-                            <div className="card event-card h-100 border-0 shadow-sm">
-                                <img
-                                    src={event.image}
-                                    className="card-img-top rounded-top latest-event-img"
-                                    alt={event.category}
-                                />
-                                <div className="card-body">
-                                    <h5 className="card-title">{event.eventName}</h5>
-                                    <p className="card-text">{event.eventDescription}</p>
-                                    <p className="card-text"><strong>Category:</strong> {event.category}</p>
-                                    <p className="card-text"><strong>Date:</strong> {new Date(event.eventDate).toLocaleDateString()}</p>
+                    <div className="event-card" key={event._id}>
+                        <Link to={`/events/${event._id}`} className="event-link">
+                            <img
+                                src={event.image}
+                                className="event-image"
+                                alt={event.category}
+                            />
+                            <div className="event-details">
+                                <h5 className="event-title">{event.eventName}</h5>
+                                <p className="event-description">{event.eventDescription}</p>
+                                <p className="event-category"><strong>Category:</strong> {event.category}</p>
+                                <p className="event-date"><strong>Date:</strong> {new Date(event.eventDate).toLocaleDateString()}</p>
 
-                                    <button className="btn-secondary event-button">
-                                        More Details
-                                    </button>
-                                </div>
+                                <button className="event-button">
+                                    More Details
+                                </button>
                             </div>
                         </Link>
                     </div>
                 ))}
             </div>
         </div>
-
     );
 };
 
