@@ -255,17 +255,21 @@ header.home-header {
     font-weight: 600;
 }
 
+<<<<<<< HEAD
 .events-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 1em;
 }
 
+=======
+>>>>>>> 2eba715c1219008a132a9e611b2c6f731a625e96
 .user-profile-table {
     width: 100%;
     border-collapse: collapse;
 }
 
+<<<<<<< HEAD
 .row {
     display: -ms-flexbox;
     display: flex;
@@ -289,6 +293,8 @@ h2.latest-events-title {
 .text-center {
     text-align: center !important;
 }
+=======
+>>>>>>> 2eba715c1219008a132a9e611b2c6f731a625e96
 .user-profile-table td, 
 .user-profile-table th {
     padding: 12px;
@@ -321,7 +327,13 @@ h2.latest-events-title {
 
 .contact-header {
     padding: 25px;
+<<<<<<< HEAD
     border-radius: 12px;
+=======
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+>>>>>>> 2eba715c1219008a132a9e611b2c6f731a625e96
     text-align: center;
 }
 
@@ -339,10 +351,13 @@ h2.latest-events-title {
     font-weight: 600;
 }
 
+<<<<<<< HEAD
 .event-details {
     padding: 15px;
 }
 
+=======
+>>>>>>> 2eba715c1219008a132a9e611b2c6f731a625e96
 .download-pdf .btn-download {
     background-color: #007bff;
     color: #ffffff;
@@ -499,7 +514,11 @@ h2.latest-events-title {
 }
 
 .contact-header {
+<<<<<<< HEAD
     width: 100%;
+=======
+    width: 50%;
+>>>>>>> 2eba715c1219008a132a9e611b2c6f731a625e96
     margin: auto;
 }
 
@@ -530,11 +549,14 @@ h2.latest-events-title {
         flex-direction: column;
         align-items: flex-start;
     }
+<<<<<<< HEAD
     .col-md-12 {
         -ms-flex: 0 0 100%;
         flex: 0 0 100%;
         max-width: 100%;
     }
+=======
+>>>>>>> 2eba715c1219008a132a9e611b2c6f731a625e96
     .contact-info {
         width: 100%;
         margin: auto;
@@ -575,11 +597,14 @@ h2.latest-events-title {
         text-align: center;
         margin-top: 10px;
     }
+<<<<<<< HEAD
     .events-grid {
         display: grid;
         grid-template-columns: 1fr;
         grid-gap: 1em;
     }
+=======
+>>>>>>> 2eba715c1219008a132a9e611b2c6f731a625e96
 
     .contact-info {
         width: 100%;

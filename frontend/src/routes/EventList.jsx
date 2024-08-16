@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { TbSearch } from 'react-icons/tb';
 import { getEvents } from '../services/api.service';
+<<<<<<< HEAD
 import './EventList.css';
+=======
+import '../routes/auth/main.css';
+>>>>>>> 2eba715c1219008a132a9e611b2c6f731a625e96
 
 export default function EventList() {
     const [events, setEvents] = useState([]);
