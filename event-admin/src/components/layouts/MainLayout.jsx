@@ -30,6 +30,9 @@ const MainLayout = () => {
             <li className="px-3 py-2">
               <Link className="text-white text-decoration-none" to={'/feedback'}>Feedback</Link>
             </li>
+            <li className="px-3 py-2">
+              <Link className="text-white text-decoration-none" to={'/bookings'}>Event Bookings</Link>
+            </li>
           </ul>
         </div>
       </Sider>
