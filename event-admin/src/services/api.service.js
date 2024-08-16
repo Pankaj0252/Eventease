@@ -127,3 +127,21 @@ export const deleteSingleFeedback = async (id) => {
     return response.data;
   });
 };
+
+export const getBookings = async () => {
+  return axios.get('/admin/bookings').then(({ data: response }) => {
+    return response.data;
+  });
+};
+
+export const getSingleBooking = async (id) => {
+  return axios.get(`/admin/bookings/${id}`).then(({ data: response }) => {
+    return response.data;
+  });
+};
+
+export const deleteSingleBooking = async (id) => {
+  return axios.delete('/admin/bookings/' + id).then(({ data: response }) => {
+    return response.data;
+  });
+};

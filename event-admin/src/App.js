@@ -7,12 +7,14 @@ import UserProfile from './routes/UserProfile';
 import Dashboard from './routes/Dashboard';
 import MainLayout from './components/layouts/MainLayout';
 import Contact from './routes/Contact';
+import Booking from './routes/Booking';
 import ContactDetails from './routes/ContactDetails';
 import Feedback from './routes/Feedback';
 import FeedbackDetails from './routes/FeedbackDetails';
 import Signup from './routes/auth/Signup';
 import Login from './routes/auth/Login';
 import { getAccessToken, getUserFromLocalstorage } from './services/localstorage';
+import BookingDetails from './routes/BookingDetails';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -39,6 +41,8 @@ function App() {
             <Route path="/events/:eventId" element={<EventProfile />} />
             <Route path="/users/:userId" element={<UserProfile />} />
             <Route path="/contacts" element={<Contact />} />
+            <Route path="/bookings" element={<Booking />} />
+            <Route path="/bookings/:bookingId" element={<BookingDetails />} />
             <Route path="/contacts/:contactId" element={<ContactDetails />} />
             <Route path="/feedback" element={<Feedback />} />
             <Route path="/feedback/:feedbackId" element={<FeedbackDetails />} />
