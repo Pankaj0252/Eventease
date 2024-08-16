@@ -1,0 +1,46 @@
+.booking-details {
+    padding: 3rem;
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    padding: 0.75rem 1.25rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.table-bordered {
+    border: 1px solid #dee2e6;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.075);
+}
+
+td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
