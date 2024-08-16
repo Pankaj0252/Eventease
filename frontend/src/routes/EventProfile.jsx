@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getEventsById } from '../services/api.service';
-
+import '../routes/auth/main.css';
 
 const EventProfile = () => {
     const params = useParams();
@@ -12,38 +12,32 @@ const EventProfile = () => {
         const fetchSingleEvent = async () => {
             try {
                 const result = await getEventsById(eventId);
-                console.log('Fetched Single Events:', result);
                 setEvent(result);
             } catch (error) {
-                console.error('Error setting events:', error);
+                console.error('Error fetching event:', error);
             }
         };
 
         fetchSingleEvent();
     }, [eventId]);
 
-
     return (
-        <div className="single-event-section">
-            <div className="container">
-                <div className="row">
-                    {event ? (
-                        <div>
-                            <img className="w-100 mb-5" src={event.image} alt={event.category} />
-                            <h2 className="text-center">{event.eventName}</h2>
-                            <p className="lead">{event.eventDescription}</p>
-                            <p>{event.eventDate}</p>
-                            <p>{event.eventLocation}</p>
-                        </div>
-                    ) : (
-                        <p>Loading...</p>
-                    )}
-
-                </div>
+        <div className="event-profile-container">
+            <div className="event-profile-content">
+                {event ? (
+                    <div className="event-details">
+                        <img className="event-image" src={event.image} alt={event.category} />
+                        <h2 className="event-title">{event.eventName}</h2>
+                        <p className="event-description">{event.eventDescription}</p>
+                        <p className="event-date">{event.eventDate}</p>
+                        <p className="event-location">{event.eventLocation}</p>
+                    </div>
+                ) : (
+                    <p>Loading...</p>
+                )}
             </div>
         </div>
     );
-
 };
 
 export default EventProfile;

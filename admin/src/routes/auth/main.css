@@ -1,0 +1,400 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.custom-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Dashboard Page Header */
+.dashboard-page-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #dee2e6;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.custom-btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.primary-btn {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.success-btn {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.secondary-btn {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.danger-btn {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.primary-btn:hover {
+    background-color: #0056b3;
+}
+
+.header-buttons .custom-btn {
+    margin-left: 10px;
+}
+
+/* Search Bar */
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-icon {
+    margin-right: 10px;
+}
+
+.search-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    width: 100%;
+}
+
+/* Table Styles */
+.user-table,
+.event-table,
+.feedback-table,
+.user-profile-table,
+.contacts-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.user-table th, .user-table td,
+.event-table th, .event-table td,
+.feedback-table th, .feedback-table td,
+.user-profile-table th, .user-profile-table td,
+.contacts-table th, .contacts-table td {
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+}
+
+.user-table thead,
+.event-table thead,
+.feedback-table thead,
+.user-profile-table th,
+.contacts-table thead {
+    background-color: #f1f1f1;
+}
+
+.user-table tbody tr:nth-child(even),
+.event-table tbody tr:nth-child(even),
+.feedback-table tbody tr:nth-child(even),
+.user-profile-table tbody tr:nth-child(even),
+.contacts-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #ffffff;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.form-actions .custom-btn {
+    margin-left: 10px;
+}
+
+/* Event List Styles */
+.event-list {
+    padding: 20px;
+}
+
+.event-list .user-table {
+    margin-top: 20px;
+}
+
+/* Event Profile Styles */
+.event-profile-container {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+}
+
+.event-profile-card {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+}
+
+.event-profile-header {
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.event-profile-body {
+    padding: 20px;
+}
+
+.event-profile-table td {
+    padding: 10px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Feedback Styles */
+.feedback-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.feedback-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.btn-download {
+    background-color: #28a745;
+    color: #ffffff;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-download:hover {
+    background-color: #218838;
+}
+
+.btn-delete {
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    color: #c82333;
+}
+
+/* Login and Signup Forms */
+.login-container, .signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f8f9fa;
+}
+
+.form-wrapper {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+}
+
+.auth-form {
+    width: 100%;
+}
+
+.auth-form h3 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.auth-form hr {
+    margin-bottom: 20px;
+}
+
+.btn-submit {
+    width: 100%;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+    background-color: #0056b3;
+}
+
+.account-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Feedback Messages */
+.alert {
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.alert.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Contact Table */
+.contact-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+}
+
+.contact-header {
+    margin-bottom: 20px;
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.contacts-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.contacts-table th, .contacts-table td {
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+}
+
+.contacts-table thead {
+    background-color: #f1f1f1;
+}
+
+.contacts-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form-wrapper {
+        padding: 15px;
+    }
+    .contact-container {
+        padding: 15px;
+    }
+}

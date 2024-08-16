@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus } from 'react-bootstrap-icons';
-import { TbTrash, TbEdit, TbSearch } from 'react-icons/tb';
-import { Container, Button, Form, Modal, Table, InputGroup, DropdownButton, Dropdown } from "react-bootstrap";
+import { Plus, Search } from 'react-bootstrap-icons';
 import { createEvent, deleteEvent, updateEvent, getEvents } from '../services/api.service';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import '../routes/auth/main.css'; // Import the CSS file
 
 export default function EventList() {
     const [events, setEvents] = useState([]);
-    const [totalEvents, setTotalEvents] = useState([]);
+    const [totalEvents, setTotalEvents] = useState(0);
     const [loading, setLoading] = useState(true);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isUpdateMode, setIsUpdateMode] = useState(false);
-    const [currenteventId, setCurrenteventId] = useState(null);
+    const [currentEventId, setCurrentEventId] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [formValues, setFormValues] = useState({
         eventName: '',
@@ -48,7 +49,7 @@ export default function EventList() {
             reader.onloadend = () => {
                 setFormValues({ ...formValues, image: reader.result });
             };
-            reader.readAsDataURL(file); // This converts the file to a base64 string
+            reader.readAsDataURL(file);
         }
     };
 
@@ -68,9 +69,8 @@ export default function EventList() {
     const showModal = (event) => {
         if (event) {
             setIsUpdateMode(true);
-            setCurrenteventId(event._id);
+            setCurrentEventId(event._id);
             setFormValues(event);
-            ;
         } else {
             setIsUpdateMode(false);
             setFormValues({
@@ -87,7 +87,7 @@ export default function EventList() {
 
     const hideModal = () => {
         setIsModalVisible(false);
-        setCurrenteventId(null);
+        setCurrentEventId(null);
     };
 
     const handleSearchChange = (e) => {
@@ -103,24 +103,20 @@ export default function EventList() {
         );
     };
 
-    const handleDeleteEvent = (id) => {
-        deleteEvent(id)
-            .then(({ data: result }) => {
-                const event = result;
-                console.log('Deleted event:', event);
-                fetchEvents();
-            })
-            .catch((error) => {
-                console.log('Error deleting event:', error);
-            });
+    const handleDeleteEvent = async (id) => {
+        try {
+            await deleteEvent(id);
+            fetchEvents();
+        } catch (error) {
+            console.error('Error deleting event:', error);
+        }
     };
 
-    const handleCreateOrUpdateUser = async (event) => {
-        event.preventDefault();
+    const handleCreateOrUpdateEvent = async (e) => {
+        e.preventDefault();
         try {
             if (isUpdateMode) {
-                await updateEvent(currenteventId, formValues);
-
+                await updateEvent(currentEventId, formValues);
             } else {
                 await createEvent(formValues);
             }
@@ -131,170 +127,172 @@ export default function EventList() {
         }
     };
 
+    const downloadPDF = () => {
+        const doc = new jsPDF();
+        const columns = ["Event Name", "Event Description", "Event Date", "Event Location", "Category", "Date Created"];
+        const rows = events.map(event => [
+            event.eventName,
+            event.eventDescription,
+            event.eventDate,
+            event.eventLocation,
+            event.category,
+            event.createdAt
+        ]);
+        doc.autoTable({
+            head: [columns],
+            body: rows,
+        });
+
+        doc.save('events.pdf');
+    };
+
     return (
-        <Container>
-            <div className="dashboard-page-header p-3">
-                <div className="row">
-                    <div className="col-md-12">
-                        {loading ? (
-                            <p>Loading...</p>
-                        ) : (
-                            <div>
-                                <div className="row mb-3">
-                                    <div className="col-md-8">
-                                        <h3>Total List of Events: {totalEvents}</h3>
-                                    </div>
+        <div className="custom-container">
+            <div className="dashboard-page-header">
+                {loading ? (
+                    <p>Loading...</p>
+                ) : (
+                    <div>
+                        <div className="header-top">
+                            <h3>Total List of Events: {totalEvents}</h3>
+                            <div className="header-buttons">
+                                <button className="custom-btn primary-btn" onClick={() => showModal(null)}>
+                                    <Plus size={18} /> New Event
+                                </button>
+                                <button className="custom-btn success-btn" onClick={downloadPDF}>
+                                    Download PDF
+                                </button>
+                            </div>
+                        </div>
+                        <div className="search-bar">
+                            <span className="search-icon"><Search size={25} /></span>
+                            <input 
+                                type="text" 
+                                className="search-input" 
+                                placeholder="Search Category....." 
+                                onChange={handleSearchChange} 
+                            />
+                        </div>
 
-                                    <div className="col-md-4 d-flex justify-content-end align-items-center">
-                                        <div className="dashboard-actions">
-                                            <Button className="text-end" variant="primary" onClick={() => showModal(null)}>
-                                                <Plus size={18} /> New Events
-                                            </Button>
+                        <table className="user-table">
+                            <thead>
+                                <tr>
+                                    <th>Event Name</th>
+                                    <th>Event Description</th>
+                                    <th>Event Date</th>
+                                    <th>Event Location</th>
+                                    <th>Category</th>
+                                    <th>Date Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {getFilteredEvents().map(event => (
+                                    <tr key={event._id}>
+                                        <td><Link to={`/events/${event._id}`}>{event.eventName}</Link></td>
+                                        <td>{event.eventDescription}</td>
+                                        <td>{event.eventDate}</td>
+                                        <td>{event.eventLocation}</td>
+                                        <td>{event.category}</td>
+                                        <td>{event.createdAt}</td>
+                                        <td>
+                                            <button className="custom-btn danger-btn" onClick={() => handleDeleteEvent(event._id)}>
+                                                Delete
+                                            </button>
+                                            <button className="custom-btn secondary-btn" onClick={() => showModal(event)}>
+                                                Edit
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+
+                        {isModalVisible && (
+                            <div className="modal-overlay">
+                                <div className="modal-content">
+                                    <button className="close-btn" onClick={hideModal}>×</button>
+                                    <h2>{isUpdateMode ? "Update Event" : "Create Event"}</h2>
+                                    <form onSubmit={handleCreateOrUpdateEvent}>
+                                        <div className="form-group">
+                                            <label>Event Name</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter event name"
+                                                name="eventName"
+                                                value={formValues.eventName}
+                                                onChange={handleInputChange}
+                                                required
+                                            />
                                         </div>
-                                    </div>
-                                </div>
-                                <div className="row justify-content-center mb-5">
-                                    <div className="col-md-6 mt-3">
-                                        <div className="input-group">
-                                            <span className="input-group-text"><TbSearch size={25} /></span>
-                                            <input type="text" className="form-control" placeholder="Search Category....." onChange={handleSearchChange} />
+                                        <div className="form-group">
+                                            <label>Event Description</label>
+                                            <textarea
+                                                placeholder="Enter event description"
+                                                name="eventDescription"
+                                                value={formValues.eventDescription}
+                                                onChange={handleInputChange}
+                                                required
+                                            />
                                         </div>
-                                    </div>
-                                </div>
-
-                                <Table striped bordered hover>
-                                    <thead>
-                                        <tr>
-                                            <th>Event Name</th>
-                                            <th>Event Description</th>
-                                            <th>Event Date</th>
-                                            <th>Event Location</th>
-                                            <th>Category</th>
-                                            <th>Date Created</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {getFilteredEvents().map(event => (
-                                            <tr key={event._id}>
-                                                <td><Link to={`/events/${event._id}`}>{event.eventName}</Link></td>
-                                                <td>{event.eventDescription}</td>
-                                                <td>{event.eventDate}</td>
-                                                <td>{event.eventLocation}</td>
-                                                <td>{event.category}</td>
-                                                <td>{event.createdAt}</td>
-                                                <td>
-                                                    <Button variant="danger" size="sm" className="mx-2" onClick={() => handleDeleteEvent(event._id)}>
-                                                        <TbTrash />
-                                                    </Button>
-                                                    <Button variant="secondary" size="sm" onClick={() => showModal(event)}>
-                                                        <TbEdit />
-                                                    </Button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </Table>
-
-                                <div className="row justify-content-center">
-                                    <div className="col-md-10">
-                                        <div className="form-wrapper auth-form">
-                                            <Modal
-                                                show={isModalVisible}
-                                                onHide={hideModal}
-                                                backdrop="static"
-                                                keyboard={false}
+                                        <div className="form-group">
+                                            <label>Event Date</label>
+                                            <input
+                                                type="date"
+                                                name="eventDate"
+                                                value={formValues.eventDate}
+                                                onChange={handleInputChange}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Event Location</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter event location"
+                                                name="eventLocation"
+                                                value={formValues.eventLocation}
+                                                onChange={handleInputChange}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Profile Image</label>
+                                            <input
+                                                type="file"
+                                                onChange={handleFileChange}
+                                                required={!isUpdateMode}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Category</label>
+                                            <select
+                                                name="category"
+                                                value={formValues.category}
+                                                onChange={(e) => handleCategoryChange(e.target.value)}
+                                                required
                                             >
-                                                <Form onSubmit={handleCreateOrUpdateUser}>
-                                                    <Modal.Header closeButton>
-                                                        <Modal.Title>{isUpdateMode ? "Update Event" : "Create Event"}</Modal.Title>
-                                                    </Modal.Header>
-                                                    <Modal.Body>
-                                                        <Form.Group className="mb-3">
-                                                            <Form.Label>Event Name</Form.Label>
-                                                            <Form.Control
-                                                                type="text"
-                                                                placeholder="Enter event name"
-                                                                name="eventName"
-                                                                value={formValues.eventName}
-                                                                onChange={handleInputChange}
-                                                                required
-                                                            />
-                                                        </Form.Group>
-                                                        <Form.Group className="mb-3">
-                                                            <Form.Label>Event Description</Form.Label>
-                                                            <Form.Control
-                                                                as="textarea"
-                                                                placeholder="Enter event description"
-                                                                name="eventDescription"
-                                                                value={formValues.eventDescription}
-                                                                onChange={handleInputChange}
-                                                                required
-                                                            />
-                                                        </Form.Group>
-                                                        <Form.Group className="mb-3">
-                                                            <Form.Label>Event Date</Form.Label>
-                                                            <Form.Control
-                                                                type="date"
-                                                                name="eventDate"
-                                                                onChange={handleInputChange}
-                                                                required
-                                                            />
-                                                        </Form.Group>
-                                                        <Form.Group className="mb-3">
-                                                            <Form.Label>Event Location</Form.Label>
-                                                            <Form.Control
-                                                                type="text"
-                                                                placeholder="Enter event location"
-                                                                name="eventLocation"
-                                                                value={formValues.eventLocation}
-                                                                onChange={handleInputChange}
-                                                                required
-                                                            />
-                                                        </Form.Group>
-                                                        <Form.Group className="mb-3">
-                                                            <Form.Label>Profile Image</Form.Label>
-                                                            <Form.Control
-                                                                type="file"
-                                                                onChange={handleFileChange}
-                                                                required
-                                                            />
-                                                        </Form.Group>
-                                                        <Form.Group className="mb-3">
-                                                            <Form.Label>Category</Form.Label>
-                                                            <InputGroup>
-                                                                <DropdownButton
-                                                                    variant="outline-secondary"
-                                                                    title={formValues.category || "Select category"}
-                                                                    onSelect={handleCategoryChange}
-                                                                >
-                                                                    <Dropdown.Item eventKey="music">Music</Dropdown.Item>
-                                                                    <Dropdown.Item eventKey="sports">Sports</Dropdown.Item>
-                                                                    <Dropdown.Item eventKey="arts">Arts</Dropdown.Item>
-                                                                    <Dropdown.Item eventKey="education">Education</Dropdown.Item>
-                                                                    <Dropdown.Item eventKey="business">Business</Dropdown.Item>
-                                                                </DropdownButton>
-                                                            </InputGroup>
-                                                        </Form.Group>
-                                                    </Modal.Body>
-                                                    <Modal.Footer>
-                                                        <Button variant="secondary" onClick={hideModal}>
-                                                            Cancel
-                                                        </Button>
-                                                        <Button variant="primary" type="submit">
-                                                            {isUpdateMode ? "Update" : "Create"}
-                                                        </Button>
-                                                    </Modal.Footer>
-                                                </Form>
-                                            </Modal>
+                                                <option value="">Select Category</option>
+                                                <option value="Conference">Conference</option>
+                                                <option value="Seminar">Seminar</option>
+                                                <option value="Workshop">Workshop</option>
+                                            </select>
                                         </div>
-                                    </div>
+                                        <div className="form-actions">
+                                            <button className="custom-btn secondary-btn" type="button" onClick={hideModal}>
+                                                Close
+                                            </button>
+                                            <button className="custom-btn primary-btn" type="submit">
+                                                {isUpdateMode ? "Update Event" : "Create Event"}
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         )}
                     </div>
-                </div>
+                )}
             </div>
-        </Container>
+        </div>
     );
 }

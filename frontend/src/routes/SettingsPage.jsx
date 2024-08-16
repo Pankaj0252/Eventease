@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Button, Alert } from 'react-bootstrap';
 import { getAccessToken, getUserFromLocalstorage } from '../services/localstorage';
 import { updateAccount } from '../services/api.service';
+import './SettingsPage.css';
 
 const SettingsPage = () => {
     const [user, setUser] = useState(null);
@@ -50,7 +50,6 @@ const SettingsPage = () => {
                 .then((response) => {
                     console.log('Response data:', response.data);
                     setUser(response.data);
-                    console.log('Updated user state:', user);
                     localStorage.setItem('user', JSON.stringify(response.data));
                     setMessage({ type: 'success', content: 'Updated successfully!' });
                 })
@@ -64,75 +63,68 @@ const SettingsPage = () => {
     };
 
     return (
-        <div className="container">
-
-            <h1 className="mt-5 mb-5 text-center">Manage Your Account</h1>
-            <div className="row justify-content-center">
-                <div className="col-md-4">
-                    <div className="card text-center p-3">
-                        <div className="card-header mb-3">Profile Settings</div>
-                        <Form onSubmit={handleFormSubmit}>
-                            <Form.Group className="mb-4">
-                                {message && (
-                                    <Alert variant={message.type} className="mb-3">
-                                        {message.content}
-                                    </Alert>
-                                )}
-                                <div className="d-flex flex-column align-items-center">
-                                    <div className="circle-image">
-                                        <img
-                                            src={formData.profileUrl}
-                                            alt="Profile"
-                                            className="w-100 h-100 mb-3"
-                                        />
-                                    </div>
-                                    <Button variant="secondary" onClick={() => document.getElementById('fileInput').click()}>
-                                        Change Profile
-                                    </Button>
-                                    <Form.Group className="mb-3 d-none">
-                                        <Form.Label>Profile Image</Form.Label>
-                                        <Form.Control
-                                            id="fileInput"
-                                            type="file"
-                                            onChange={handleFileChange}
-                                            required
-                                        />
-                                    </Form.Group>
-                                </div>
-                                <Form.Label className="d-flex text-left mt-2">Name</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Enter Name"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Form.Group>
-                            <Form.Group className="mb-4">
-                                <Form.Label className="d-flex text-left">Email</Form.Label>
-                                <Form.Control
-                                    type="email"
-                                    placeholder="Enter email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    required
-                                    disabled
-                                />
-                            </Form.Group>
-                            <Button variant="secondary" type="submit" className="w-15 mt-3 mb-3">
-                                Update Account
-                            </Button>
-                        </Form>
+        <div className="settings-container">
+            <h1 className="settings-title">Manage Your Account</h1>
+            <div className="settings-card">
+                <div className="card-header">Profile Settings</div>
+                <form onSubmit={handleFormSubmit} className="settings-form">
+                    {message && (
+                        <div className={`alert ${message.type}`}>
+                            {message.content}
+                        </div>
+                    )}
+                    <div className="profile-section">
+                        <div className="profile-image-wrapper">
+                            <img
+                                src={formData.profileUrl}
+                                alt="Profile"
+                                className="profile-image"
+                            />
+                        </div>
+                        <button
+                            type="button"
+                            className="change-profile-button"
+                            onClick={() => document.getElementById('fileInput').click()}
+                        >
+                            Change Profile
+                        </button>
+                        <input
+                            id="fileInput"
+                            type="file"
+                            onChange={handleFileChange}
+                            className="file-input"
+                        />
                     </div>
-                </div>
+                    <label className="form-label">Name</label>
+                    <input
+                        type="text"
+                        placeholder="Enter Name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        className="form-input"
+                        required
+                    />
+                    <label className="form-label">Email</label>
+                    <input
+                        type="email"
+                        placeholder="Enter email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className="form-input"
+                        required
+                        disabled
+                    />
+                    <button type="submit" className="update-button">
+                        Update Account
+                    </button>
+                </form>
             </div>
-            <div className="mt-5 text-center mb-5">
-                <Link to="/" className="btn btn-primary p-2">Back to Home</Link>
+            <div className="back-to-home">
+                <Link to="/" className="home-link">Back to Home</Link>
             </div>
         </div>
-
     );
 };
 

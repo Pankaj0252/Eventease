@@ -1,19 +1,14 @@
-import React from 'react'
+import React from 'react';
+import '../routes/auth/main.css';
 
 export default function Thankyou() {
     return (
-        <div className="thankyou-section d-flex justify-content-center align-items-center m-5">
-            <div className="container py-5">
-                <div className="row justify-content-center">
-                    <div className="col-md-6">
-                        <div className="card py-5 text-center border-radius">
-                            <h1 className="px-3">
-                                Thankyou for visiting our website 😊
-                            </h1>
-                        </div>
-                    </div>
-                </div>
+        <div className="thankyou-container">
+            <div className="thankyou-card">
+                <h1 className="thankyou-message">
+                    Thank you for visiting our website 😊
+                </h1>
             </div>
         </div>
-    )
+    );
 }

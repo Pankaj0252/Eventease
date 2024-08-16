@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getEventsById } from '../services/api.service';
-import { Card, Table } from 'react-bootstrap';
+import '../routes/auth/main.css'; 
 
 const EventProfile = () => {
     const params = useParams();
@@ -23,11 +23,11 @@ const EventProfile = () => {
     }, [eventId]);
 
     return (
-        <div className="p-5">
-            <Card>
-                <Card.Header>Event info</Card.Header>
-                <Card.Body>
-                    <Table striped bordered hover>
+        <div className="event-profile-container p-5">
+            <div className="event-profile-card">
+                <div className="event-profile-header">Event Info</div>
+                <div className="event-profile-body">
+                    <table className="event-profile-table">
                         <tbody>
                             <tr>
                                 <td><strong>Event Name</strong></td>
@@ -54,9 +54,9 @@ const EventProfile = () => {
                                 <td>{event?.createdAt}</td>
                             </tr>
                         </tbody>
-                    </Table>
-                </Card.Body>
-            </Card>
+                    </table>
+                </div>
+            </div>
         </div>
     );
 };

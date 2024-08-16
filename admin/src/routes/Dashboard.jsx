@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { TbTrash, TbEdit, TbPlus } from 'react-icons/tb';
-import { Container, Button, Form, Modal, Table, InputGroup, DropdownButton, Dropdown } from "react-bootstrap";
-import { createUser, deleteSingleUser, getUsers, updateUser } from '../services/api.service';
-import { clearAccessToken, clearUserFromLocalstorage } from '../services/localstorage';
+import { Plus, Search } from 'react-bootstrap-icons';
+import { clearAccessToken, clearUserFromLocalstorage } from '../services/localstorage'; 
+import { createUser, deleteSingleUser, updateUser, getUsers } from '../services/api.service';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import '../routes/auth/main.css';
 
 export default function Dashboard() {
     const [users, setUsers] = useState([]);
@@ -12,6 +14,7 @@ export default function Dashboard() {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isUpdateMode, setIsUpdateMode] = useState(false);
     const [currentUserId, setCurrentUserId] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
     const [formValues, setFormValues] = useState({
         name: '',
         email: '',
@@ -27,12 +30,11 @@ export default function Dashboard() {
     const fetchUsers = async () => {
         try {
             const result = await getUsers();
-            console.log('result', result);
             setUsers(result);
             setTotalUsers(result.length);
             setLoading(false);
         } catch (error) {
-            console.error('Error', error);
+            console.error('Error fetching users:', error);
             setLoading(false);
         }
     };
@@ -60,26 +62,48 @@ export default function Dashboard() {
         setCurrentUserId(null);
     };
 
-    const handleCreateOrUpdateUser = async (event) => {
-        event.preventDefault();
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormValues({
+            ...formValues,
+            [name]: value,
+        });
+    };
+
+    const handleRoleChange = (role) => {
+        setFormValues({
+            ...formValues,
+            role,
+        });
+    };
+
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const getFilteredUsers = () => {
+        if (!searchQuery) {
+            return users;
+        }
+        return users.filter((user) =>
+            user.role && user.role.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    };
+
+    const handleCreateOrUpdateUser = async (e) => {
+        e.preventDefault();
         const { name, email, password, phone, role } = formValues;
 
-        if (isUpdateMode) {
-            try {
+        try {
+            if (isUpdateMode) {
                 await updateUser(currentUserId, { name, email, password, phone, role });
-                fetchUsers();
-                hideModal();
-            } catch (error) {
-                console.error('Error updating user:', error);
-            }
-        } else {
-            try {
+            } else {
                 await createUser({ name, email, password, phone, role });
-                fetchUsers();
-                hideModal();
-            } catch (error) {
-                console.error(error);
             }
+            fetchUsers();
+            hideModal();
+        } catch (error) {
+            console.error('Error handling user:', error);
         }
     };
 
@@ -92,162 +116,169 @@ export default function Dashboard() {
         }
     };
 
-    const handleChange = (event) => {
-        setFormValues({ ...formValues, [event.target.name]: event.target.value });
-    };
+    const downloadPDF = () => {
+        const doc = new jsPDF();
+        const columns = ["Name", "Role", "Email", "Date Created"];
+        const rows = users.map(user => [
+            user.name,
+            user.role,
+            user.email,
+            user.createdAt
+        ]);
+        doc.autoTable({
+            head: [columns],
+            body: rows,
+        });
 
-    const handleRoleChange = (role) => {
-        setFormValues({ ...formValues, role });
-    };
-
-    const handleLogout = () => {
-        clearAccessToken();
-        clearUserFromLocalstorage();
-        window.location.href = '/login';
+        doc.save('users.pdf');
     };
 
     return (
-        <Container>
-            <div className="dashboard-page-header p-3">
-                <div className="row">
-                    <div className="col-md-12">
-                        {loading ? (
-                            <p>Loading...</p>
-                        ) : (
-                            <div>
-                                <div className="row mb-3">
-                                    <div className="col-md-8">
-                                        <h3>Total List of Users: {totalUsers}</h3>
-                                    </div>
+        <div className="custom-container">
+            <div className="dashboard-page-header">
+                {loading ? (
+                    <p>Loading...</p>
+                ) : (
+                    <div>
+                        <div className="header-top">
+                            <h3>Total List of Users: {totalUsers}</h3>
+                            <div className="header-buttons">
+                                <button className="custom-btn primary-btn" onClick={() => showModal(null)}>
+                                    <Plus size={18} /> New User
+                                </button>
+                                <button className="custom-btn success-btn" onClick={downloadPDF}>
+                                    Download PDF
+                                </button>
+                                <button className="custom-btn secondary-btn" onClick={() => {
+                                    clearAccessToken();
+                                    clearUserFromLocalstorage();
+                                    window.location.href = '/login';
+                                }}>
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                        <div className="search-bar">
+                            <span className="search-icon"><Search size={25} /></span>
+                            <input 
+                                type="text" 
+                                className="search-input" 
+                                placeholder="Search Role....." 
+                                onChange={handleSearchChange} 
+                            />
+                        </div>
 
-                                    <div className="col-md-4">
-                                        <div className="d-flex justify-content-end">
-                                            <Button className="mx-2 justify-content-end" variant="primary" onClick={() => showModal(null)}>
-                                                <TbPlus /> New User
-                                            </Button>
-                                            <Button
+                        <table className="user-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Email</th>
+                                    <th>Date Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {getFilteredUsers().map(user => (
+                                    <tr key={user._id}>
+                                        <td><Link to={`/users/${user._id}`}>{user.name}</Link></td>
+                                        <td>{user.role}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.createdAt}</td>
+                                        <td>
+                                            <button className="custom-btn danger-btn" onClick={() => handleDeleteUser(user._id)}>
+                                                Delete
+                                            </button>
+                                            <button className="custom-btn secondary-btn" onClick={() => showModal(user)}>
+                                                Edit
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+
+                        {isModalVisible && (
+                            <div className="modal-overlay">
+                                <div className="modal-content">
+                                    <button className="close-btn" onClick={hideModal}>×</button>
+                                    <h2>{isUpdateMode ? "Update User" : "Create User"}</h2>
+                                    <form onSubmit={handleCreateOrUpdateUser}>
+                                        <div className="form-group">
+                                            <label>Name</label>
+                                            <input
                                                 type="text"
-                                                onClick={handleLogout}
-                                                className="btn btn-secondary p-2 mx-2"
-                                            >
-                                                Logout
-                                            </Button>
+                                                placeholder="Enter name"
+                                                name="name"
+                                                value={formValues.name}
+                                                onChange={handleInputChange}
+                                                required
+                                            />
                                         </div>
-                                    </div>
+                                        <div className="form-group">
+                                            <label>Email</label>
+                                            <input
+                                                type="email"
+                                                placeholder="Enter email"
+                                                name="email"
+                                                value={formValues.email}
+                                                onChange={handleInputChange}
+                                                required
+                                                disabled={isUpdateMode}
+                                            />
+                                        </div>
+                                        {!isUpdateMode && (
+                                            <div className="form-group">
+                                                <label>Password</label>
+                                                <input
+                                                    type="password"
+                                                    placeholder="Enter password"
+                                                    name="password"
+                                                    value={formValues.password}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+                                            </div>
+                                        )}
+                                        <div className="form-group">
+                                            <label>Phone</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter phone number"
+                                                name="phone"
+                                                value={formValues.phone}
+                                                onChange={handleInputChange}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Role</label>
+                                            <select
+                                                name="role"
+                                                value={formValues.role}
+                                                onChange={(e) => handleRoleChange(e.target.value)}
+                                                required
+                                            >
+                                                <option value="admin">Admin</option>
+                                                <option value="event-manager">Event Manager</option>
+                                                <option value="attendee">Attendee</option>
+                                            </select>
+                                        </div>
+                                        <div className="form-actions">
+                                            <button className="custom-btn secondary-btn" onClick={hideModal}>
+                                                Close
+                                            </button>
+                                            <button className="custom-btn primary-btn" type="submit">
+                                                {isUpdateMode ? "Update User" : "Create User"}
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
-                                <Table striped bordered hover>
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Role</th>
-                                            <th>Email</th>
-                                            <th>Date Created</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {users.map(user => (
-                                            <tr key={user._id}>
-                                                <td><Link to={`/users/${user._id}`}>{user.name}</Link></td>
-                                                <td>{user.role}</td>
-                                                <td>{user.email}</td>
-                                                <td>{user.createdAt}</td>
-                                                <td>
-                                                    <Button variant="danger" size="sm" className="m-2" onClick={() => handleDeleteUser(user._id)}>
-                                                        <TbTrash />
-                                                    </Button>
-                                                    <Button variant="secondary" size="sm" onClick={() => showModal(user)}>
-                                                        <TbEdit />
-                                                    </Button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </Table>
-
-                                <Modal show={isModalVisible} onHide={hideModal} centered>
-                                    <Modal.Header closeButton>
-                                        <Modal.Title>{isUpdateMode ? "Update User" : "Create User"}</Modal.Title>
-                                    </Modal.Header>
-                                    <Modal.Body>
-                                        <Form onSubmit={handleCreateOrUpdateUser}>
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Name</Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    placeholder="Enter name"
-                                                    name="name"
-                                                    value={formValues.name}
-                                                    onChange={handleChange}
-                                                    required
-                                                />
-                                            </Form.Group>
-
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Email</Form.Label>
-                                                <Form.Control
-                                                    type="email"
-                                                    placeholder="Enter email"
-                                                    name="email"
-                                                    value={formValues.email}
-                                                    onChange={handleChange}
-                                                    required
-                                                    disabled={isUpdateMode}
-                                                />
-                                            </Form.Group>
-
-                                            {!isUpdateMode && (
-                                                <>
-                                                    <Form.Group className="mb-3">
-                                                        <Form.Label>Password</Form.Label>
-                                                        <Form.Control
-                                                            type="password"
-                                                            placeholder="Enter password"
-                                                            name="password"
-                                                            value={formValues.password}
-                                                            onChange={handleChange}
-                                                            required
-                                                        />
-                                                    </Form.Group>
-                                                    <Form.Group className="mb-3">
-                                                        <Form.Label>Phone</Form.Label>
-                                                        <Form.Control
-                                                            type="text"
-                                                            placeholder="Enter phone number"
-                                                            name="phone"
-                                                            value={formValues.phone}
-                                                            onChange={handleChange}
-                                                            required
-                                                        />
-                                                    </Form.Group>
-                                                </>
-                                            )}
-
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Role</Form.Label>
-                                                <InputGroup>
-                                                    <DropdownButton
-                                                        variant="outline-secondary"
-                                                        title={formValues.role}
-                                                        onSelect={handleRoleChange}
-                                                    >
-                                                        <Dropdown.Item eventKey="admin">Admin</Dropdown.Item>
-                                                        <Dropdown.Item eventKey="event-manager">Event Manager</Dropdown.Item>
-                                                        <Dropdown.Item eventKey="attendee">Attendee</Dropdown.Item>
-                                                    </DropdownButton>
-                                                </InputGroup>
-                                            </Form.Group>
-                                            <Button variant="primary" type="submit" className="w-100">
-                                                {isUpdateMode ? 'Update User' : 'Create Account'}
-                                            </Button>
-                                        </Form>
-                                    </Modal.Body>
-                                </Modal>
                             </div>
                         )}
                     </div>
-                </div>
+                )}
             </div>
-        </Container>
+        </div>
     );
 }

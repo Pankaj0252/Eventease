@@ -1,15 +1,15 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../assets/logo-footer.jpeg";
-import "../style.css";
-import { Button } from "react-bootstrap";
+// import "../style.css"; 
+import "./navbar.css";
 import { clearAccessToken, clearUserFromLocalstorage } from "../services/localstorage";
 
 const Navbar = () => {
   const [offset, setOffset] = useState(0);
+  const [isNavOpen, setIsNavOpen] = useState(false);
+
   useEffect(() => {
     const onScroll = () => setOffset(window.pageYOffset);
-    window.removeEventListener("scroll", onScroll);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -20,44 +20,38 @@ const Navbar = () => {
     window.location.href = '/login';
   };
 
+  const toggleNav = () => setIsNavOpen(prev => !prev);
+
   return (
-    <>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-black">
-        <div className="container-fluid">
-          <a className="navbar-brand" href="/">
-            <img src={logo} alt="" className="App-logo navbar-logo" />
-          </a>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
+    <nav className={`navbar ${offset > 50 ? 'navbar-scrolled' : ''}`}>
+      <div className="navbar-container">
+        <a className="navbar-brand" href="/">
+          <img src={logo} alt="Logo" className="navbar-logo" />
+        </a>
+        <button className="navbar-toggler" onClick={toggleNav}>
+          ☰
+        </button>
+        <div className={`navbar-collapse ${isNavOpen ? 'show' : ''}`}>
+          <ul className="navbar-nav">
+            <li className="nav-item">
+              <a className="nav-link" href="/">Home</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="/events">Events</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="/contact-us">Contact Us</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="/settings">Settings</a>
+            </li>
+          </ul>
+          <button className="btn-logout" onClick={handleLogout}>
+            Logout
           </button>
-          <div className="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
-                <a className="nav-link" aria-current="page" href="/">Home</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/events">Events</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/contact-us">Contact Us</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/settings">Settings</a>
-              </li>
-            </ul>
-            <div className="d-flex">
-              <Button
-                type="text"
-                onClick={handleLogout}
-                className="btn btn-light p-2 mx-3"
-              >
-                Logout
-              </Button>
-            </div>
-          </div>
         </div>
-      </nav>
-    </>
+      </div>
+    </nav>
   );
 };
 

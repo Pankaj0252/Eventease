@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { TbTrash } from 'react-icons/tb';
-import { Container, Table, Button } from "react-bootstrap";
+import '../routes/auth/main.css';
 import { getFeedback, deleteSingleFeedback } from '../services/api.service';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 export default function Feedback() {
     const [feedback, setFeedback] = useState([]);
@@ -34,57 +35,72 @@ export default function Feedback() {
             })
             .catch((error) => {
                 console.log('Error deleting Feedback:', error);
-            })
+            });
+    };
+
+    const downloadPDF = () => {
+        const doc = new jsPDF();
+        const columns = ["Name", "Email", "Message", "Feedback Type", "Date Created"];
+        const rows = feedback.map(item => [
+            item.name,
+            item.email,
+            item.message,
+            item.feedbackType,
+            item.createdAt
+        ]);
+        doc.autoTable({
+            head: [columns],
+            body: rows,
+        });
+
+        doc.save('feedback.pdf');
     };
 
     return (
-        <Container>
-            <div className="dashboard-page-header p-3">
-                <div className="row">
-                    <div className="col-md-12">
-                        {loading ? (
-                            <p>Loading...</p>
-                        ) : (
-                            <div>
-                                <div className="row mb-3">
-                                    <div className="col-md-8">
-                                        <h3>Total List of Feedbacks: {totalFeedback}</h3>
-                                    </div>
-                                </div>
+        <div className="feedback-container">
+            <div className="feedback-header">
+                {loading ? (
+                    <p>Loading...</p>
+                ) : (
+                    <div>
+                        <div className="feedback-summary">
+                            <h3>Total List of Feedbacks: {totalFeedback}</h3>
+                            <button className="btn btn-success" onClick={downloadPDF}>
+                                Download PDF
+                            </button>
+                        </div>
 
-                                <Table striped bordered hover>
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Message</th>
-                                            <th>Feedback Type</th>
-                                            <th>Date Created</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {feedback.map((item) => (
-                                            <tr key={item._id}>
-                                                <td><Link to={`/feedback/${item._id}`}>{item.name}</Link></td>
-                                                <td>{item.email}</td>
-                                                <td>{item.message}</td>
-                                                <td>{item.feedbackType}</td>
-                                                <td>{item.createdAt}</td>
-                                                <td>
-                                                    <Button variant="danger" size="sm" onClick={() => handleDeleteFeedback(item._id)}>
-                                                        <TbTrash />
-                                                    </Button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </Table>
-                            </div>
-                        )}
+                        <table className="feedback-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Message</th>
+                                    <th>Feedback Type</th>
+                                    <th>Date Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {feedback.map((item) => (
+                                    <tr key={item._id}>
+                                        <td><Link to={`/feedback/${item._id}`}>{item.name}</Link></td>
+                                        <td>{item.email}</td>
+                                        <td>{item.message}</td>
+                                        <td>{item.feedbackType}</td>
+                                        <td>{item.createdAt}</td>
+                                        <td>
+                                            <button className="btn btn-danger btn-sm" onClick={() => handleDeleteFeedback(item._id)}>
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
-                </div>
+                )}
             </div>
-        </Container>
+        </div>
     );
 }
