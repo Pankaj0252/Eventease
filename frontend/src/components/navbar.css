@@ -75,7 +75,10 @@
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+<<<<<<< HEAD
     margin-left: auto;
+=======
+>>>>>>> 2eba715c1219008a132a9e611b2c6f731a625e96
 }
 
 .btn-logout:hover {
@@ -89,9 +92,12 @@
         display: block;
     }
 
+<<<<<<< HEAD
     .btn-logout {
         margin: auto;
     }
+=======
+>>>>>>> 2eba715c1219008a132a9e611b2c6f731a625e96
     .navbar-container {
         display: flex;
         justify-content: space-between;
