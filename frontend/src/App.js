@@ -1,22 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import Signup from './routes/auth/Signup';
-import Login from './routes/auth/Login';
-import EventList from './routes/EventList';
-import EventProfile from './routes/EventProfile';
-import Home from './routes/Home';
-import ContactUs from './routes/ContactUs';
-import AboutUs from './routes/AboutUs';
-import Footer from './components/Footer';
-import Navbar from './components/Navbar';
-import Feedback from './routes/Feedback';
-import Thankyou from './routes/Thankyou';
-import LatestEvent from './routes/LatestEvent';
-import UpcomingEvent from './routes/UpcomingEvent';
-import SettingsPage from './routes/SettingsPage';
-import { getAccessToken, getUserFromLocalstorage } from './services/localstorage';
-import MainLayout from './components/layouts/MainLayout';
+import Signup from "./routes/auth/Signup";
+import Login from "./routes/auth/Login";
+import EventList from "./routes/EventList";
+import EventProfile from "./routes/EventProfile";
+import Home from "./routes/Home";
+import ContactUs from "./routes/ContactUs";
+import AboutUs from "./routes/AboutUs";
+import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
+import Feedback from "./routes/Feedback";
+import Thankyou from "./routes/Thankyou";
+import LatestEvent from "./routes/LatestEvent";
+import UpcomingEvent from "./routes/UpcomingEvent";
+import SettingsPage from "./routes/SettingsPage";
+import {
+  getAccessToken,
+  getUserFromLocalstorage,
+} from "./services/localstorage";
+import MainLayout from "./components/layouts/MainLayout";
+import BookingForm from "./routes/BookingForm";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -33,7 +37,7 @@ function App() {
     setUserLoaded(true);
   }, []);
 
-  const authRoutes = ['/auth/login', '/auth/signup'];
+  const authRoutes = ["/auth/login", "/auth/signup"];
 
   return (
     <div className="app">
@@ -51,6 +55,7 @@ function App() {
             <Route path="/events/:eventId" element={<EventProfile />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/feedback" element={<Feedback />} />
+            <Route path="/bookings" element={<BookingForm />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/thank-you" element={<Thankyou />} />
             <Route path="/latest" element={<LatestEvent />} />
