@@ -2,11 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getAccessToken, getUserFromLocalstorage } from '../services/localstorage';
 import { updateAccount } from '../services/api.service';
-<<<<<<< HEAD
 import './SettingsPage.css';
-=======
-import '../routes/auth/main.css'; 
->>>>>>> 2eba715c1219008a132a9e611b2c6f731a625e96
 
 const SettingsPage = () => {
     const [user, setUser] = useState(null);
